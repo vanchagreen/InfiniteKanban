@@ -2,11 +2,14 @@
 
 var InfiniteKanbanApp = require('./InfiniteKanbanApp');
 var React = require('react');
-var {DefaultRoute, Route, Routes} = require('react-router');
+var Router = require('react-router');
+var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
-React.renderComponent((
-  <Routes location="history">
-    <Route path="/" handler={InfiniteKanbanApp}>
-    </Route>
-  </Routes>
-), document.getElementById('content'));
+var routes = (
+  <Route handler={InfiniteKanbanApp}>
+  </Route>
+);
+
+Router.run(routes, Router.HistoryLocation, function (Handler) {
+  React.render(<Handler/>, document.body);
+});
