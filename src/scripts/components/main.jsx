@@ -1,15 +1,30 @@
 /** @jsx React.DOM */
 
 var InfiniteKanbanApp = require('./InfiniteKanbanApp');
+var Login = require('./Login');
 var React = require('react');
 var Router = require('react-router');
+var Authentication = require('./Authentication');
+var auth = require('./authLib');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
+var highestLevel = React.createClass({
+  mixins: [Authentication],
+  render: function() {
+    return (
+      <h1> foo </h1>
+    );
+  }
+});
+
 var routes = (
-  <Route handler={InfiniteKanbanApp}>
+
+  <Route path="/" handler={InfiniteKanbanApp}>
+      <Route name="login" path="/login" handler={Login} />
+      <DefaultRoute handler={highestLevel} />
   </Route>
 );
 
-Router.run(routes, Router.HistoryLocation, function (Handler) {
+Router.run(routes, function (Handler) {
   React.render(<Handler/>, document.body);
 });
