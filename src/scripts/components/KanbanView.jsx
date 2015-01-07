@@ -3,6 +3,7 @@ var React = require('react');
 var Router = require('react-router');
 
 var TypeStore = require('../stores/TypeStore');
+var StateStore = require('../stores/StateStore');
 var WsapiActionCreators = require('../actions/WsapiActionCreators');
 
 var authenticationMixin = require('../utils/authenticationMixin');
@@ -15,35 +16,32 @@ var KanbanView = React.createClass({
 
   getInitialState: function() {
     return {
-      types: TypeStore.getTypes()
+      types: TypeStore.getTypes(),
+      states: StateStore.getStates()
     };
   },
 
   _onChange: function() {
     this.setState({
-      types: TypeStore.getTypes()
+      types: TypeStore.getTypes(),
+      states: StateStore.getStates(),
     });
   },
 
   componentWillMount: function(){
     TypeStore.addChangeListener(this._onChange);
     WsapiActionCreators.loadTypes();
+
+    StateStore.addChangeListener(this._onChange);
+    WsapiActionCreators.loadStates();
   },
 
   render: function() {
     var type = this.getParams().splat;
-
-    statePromise = wsapi.getRecords({
-      typeName: 'State',
-      order: 'OrderIndex ASC',
-      fetch: true
-    });
-    statePromise.done(function(result) {
-      debugger;
-    });
+    var featureStates = _.pluck(this.state.states[type], 'Name').join(" | ");
 
     return (
-      <h1> type: {type} </h1>
+      <code> state: {featureStates} </code>
     );
   }
 });

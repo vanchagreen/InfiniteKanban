@@ -28,10 +28,10 @@ module.exports = {
     }
 
     WsapiUtils.getRecords(opts).done(function(result) {
-      var groupedStates = _.groupBy(records, function(record) {
-        return record.Typedef ? record.Typedef._refObjectName : null;
+      var groupedStates = _.groupBy(result.records, function(record) {
+        return record.TypeDef ? record.TypeDef._refObjectName : null;
       });
-      delete groupedStates["null"]
+      delete groupedStates["null"];
       AppDispatcher.handleServerAction({
         type: ActionSources.STATES_RECEIVED,
         states: groupedStates

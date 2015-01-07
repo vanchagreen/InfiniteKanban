@@ -9,7 +9,12 @@ module.exports = {
   }),
 
   ActionSources: keyMirror({
-    TYPES_RECEIVED: 'TYPES_RECEIVED'
+    TYPES_RECEIVED: 'TYPES_RECEIVED',
+    STATES_RECEIVED: 'STATES_RECEIVED'
   })
+
+
+
+
 
 };
