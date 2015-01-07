@@ -30,7 +30,7 @@ var KanbanView = React.createClass({
 
   render: function() {
     debugger;
-    var type = this.getParams().type === '' ? this.state.types[0] : this.state.types[1] ;
+    var type = this.getParams();
     return (
       <h1> {type} </h1>
     );
