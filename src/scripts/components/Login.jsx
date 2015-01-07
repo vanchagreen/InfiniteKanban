@@ -22,7 +22,7 @@ var Login = React.createClass({
         Login.attemptedTransition = null;
         transition.retry();
       } else {
-        this.replaceWith('/InfiniteKanbanApp');
+        this.replaceWith('kanban');
     }
 
   },
