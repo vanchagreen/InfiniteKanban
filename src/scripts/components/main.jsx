@@ -4,6 +4,9 @@ var InfiniteKanbanApp = require('./InfiniteKanbanApp');
 var Login = require('./Login');
 var React = require('react');
 var Router = require('react-router');
+
+var wsapi = require('../utils/WsapiUtils');
+
 var authenticationMixin = require('../utils/authenticationMixin');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
 

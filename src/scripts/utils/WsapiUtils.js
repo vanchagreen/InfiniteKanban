@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var hostname = 'https://rally1.rallydev.com';
 var _ = require('lodash');
+var authLib = require('./authLib');
 
 function getJson(url, data) {
     return $.ajax({
@@ -9,6 +10,9 @@ function getJson(url, data) {
         data: data,
         xhrFields: {
             withCredentials: true
+        },
+        headers: {
+            zsessionid: authLib.getAPIKey()
         }
     });
 }
