@@ -8,6 +8,8 @@ var WsapiActionCreators = require('../actions/WsapiActionCreators');
 var authenticationMixin = require('../utils/authenticationMixin');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
+var wsapi = require('../utils/WsapiUtils');
+
 var KanbanView = React.createClass({
   mixins: [authenticationMixin, Router.State],
 
@@ -29,10 +31,19 @@ var KanbanView = React.createClass({
   },
 
   render: function() {
-    debugger;
-    var type = this.getParams();
+    var type = this.getParams().splat;
+
+    statePromise = wsapi.getRecords({
+      typeName: 'State',
+      order: 'OrderIndex ASC',
+      fetch: true
+    });
+    statePromise.done(function(result) {
+      debugger;
+    });
+
     return (
-      <h1> {type} </h1>
+      <h1> type: {type} </h1>
     );
   }
 });
