@@ -6,9 +6,15 @@ var React = require('react');
 var Router = require('react-router');
 var authenticationMixin = require('../utils/authenticationMixin');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
+var WsapiActionCreators = require('../actions/WsapiActionCreators');
 
 var highestLevel = React.createClass({
   mixins: [authenticationMixin],
+
+  componentDidMount: function(){
+    WsapiActionCreators.loadTypes();
+  },
+
   render: function() {
     return (
       <h1> foo </h1>
