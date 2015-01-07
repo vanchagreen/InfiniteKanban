@@ -37,7 +37,8 @@ module.exports = {
         var params = {
             start: 1,
             pagesize: options.pageSize || 50,
-            fetch: options.fields.join(',')
+            fetch: options.fields.join(','),
+            order: options.order || ''
         };
 
         if (options.project) {

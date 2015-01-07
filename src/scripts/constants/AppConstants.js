@@ -9,6 +9,7 @@ module.exports = {
   }),
 
   ActionSources: keyMirror({
+    TYPES_RECEIVED: 'TYPES_RECEIVED'
   })
 
 };

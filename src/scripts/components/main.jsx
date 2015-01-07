@@ -9,27 +9,14 @@ var wsapi = require('../utils/WsapiUtils');
 
 var authenticationMixin = require('../utils/authenticationMixin');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
-var WsapiActionCreators = require('../actions/WsapiActionCreators');
+var KanbanView = require('./KanbanView')
 
-var highestLevel = React.createClass({
-  mixins: [authenticationMixin],
-
-  componentDidMount: function(){
-    WsapiActionCreators.loadTypes();
-  },
-
-  render: function() {
-    return (
-      <h1> foo </h1>
-    );
-  }
-});
 
 var routes = (
 
   <Route path="/" handler={InfiniteKanbanApp}>
       <Route name="login" path="/login" handler={Login} />
-      <DefaultRoute handler={highestLevel} />
+      <Route name="kanban" path="/:type" handler={KanbanView} />
   </Route>
 );
 

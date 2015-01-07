@@ -1,4 +1,4 @@
-var ActionTypes = require('../constants/AppConstants').ActionTypes;
+var ActionSources = require('../constants/AppConstants').ActionSources;
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var WsapiUtils = require('../utils/WsapiUtils');
 
@@ -13,12 +13,11 @@ module.exports = {
     };
     
     WsapiUtils.getRecords(opts).done(function(types){
-      debugger;
-      AppDispatcher.dispatch({
-        type: ActionTypes.TYPES_RECEIVED,
-        types: types
+      AppDispatcher.handleServerAction({
+        type: ActionSources.TYPES_RECEIVED,
+        typeDefinitions: types
       });
     });
-    
+
   }
 }  
