@@ -4,12 +4,11 @@ var InfiniteKanbanApp = require('./InfiniteKanbanApp');
 var Login = require('./Login');
 var React = require('react');
 var Router = require('react-router');
-var Authentication = require('./Authentication');
-var auth = require('./authLib');
+var authenticationMixin = require('../utils/authenticationMixin');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
 var highestLevel = React.createClass({
-  mixins: [Authentication],
+  mixins: [authenticationMixin],
   render: function() {
     return (
       <h1> foo </h1>

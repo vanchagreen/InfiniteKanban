@@ -1,5 +1,5 @@
 var auth = require('./authLib');
-var Login = require('./Login');
+var Login = require('../components/Login');
 
 
 var Authentication = {
