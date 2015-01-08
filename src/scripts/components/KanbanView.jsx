@@ -14,6 +14,11 @@ var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
 var wsapi = require('../utils/WsapiUtils');
 
+var Grid = require('react-bootstrap/Grid');
+var Row = require('react-bootstrap/Row');
+var Col = require('react-bootstrap/Col');
+
+
 var KanbanView = React.createClass({
   mixins: [authenticationMixin, Router.State],
 
@@ -66,16 +71,37 @@ var KanbanView = React.createClass({
   },
 
   render: function() {
-    var records = _.map(this.state.records, function(record){
-      return (<Link to={'/' + record.PortfolioItemTypeName + '/' + record.ObjectID}>{record.Name}</Link>);
+    var type = this.getParams().type;
+    var states = this.state.states[type] || [];
+    var records = this.state.records || {};
+    var groupedRecords = _.groupBy(records, function(record) {
+      return record.State ? record.State._refObjectName : states[0];
     });
+
+    var maxRecords = _.max(groupedRecords, function(records) {return records.length}).length;
+
     return (
-      <div>
-        <p>types: {this.state.types}</p>
-        <p>states: {this.state.states}</p>
-        <p>currentTypePath: {this.state.currentTypePath}</p>
-        <p>records: {records} </p>
-      </div>
+      <Grid fluid={true}>
+        {states.map(function(state) {
+          return (
+            <Col xs={Math.floor(12 / states.length)} key={state}>
+              <p>{state}</p>
+              {
+                groupedRecords[state] ?
+                  groupedRecords[state].map(function(record) {
+                    return (
+                      <Row>
+                        <Link to={'/' + record.PortfolioItemTypeName + '/' + record.ObjectID}>{record.Name}</Link>
+                      </Row>
+                    )
+                  })
+                :
+                  <p></p>
+              }
+            </Col>
+          )
+        })}
+      </Grid>
     );
   }
 });

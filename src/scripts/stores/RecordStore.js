@@ -27,7 +27,6 @@ var RecordStore = merge(EventEmitter.prototype, {
 
     switch(action.type) {
       case Constants.ActionSources.RECORDS_RECEIVED:
-        debugger;
         _records = action.records;
         RecordStore.emitChange();
         break;
