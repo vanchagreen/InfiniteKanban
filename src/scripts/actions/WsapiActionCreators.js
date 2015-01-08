@@ -38,6 +38,24 @@ module.exports = {
       });
     });
 
+  },
+
+  loadRecords: function(typePath, oid) {
+    var typeName = oid === undefined ? typePath : typePath + '/Children/' + oid; 
+    var opts = {
+      typeName: typePath,
+      fetch: true
+    };
+    WsapiUtils.getRecords(opts).done(function(result) {
+      var groupedStates = _.groupBy(result.records, function(record) {
+        return record.TypeDef ? record.TypeDef._refObjectName : null;
+      });
+      AppDispatcher.handleServerAction({
+        type: ActionSources.RECORDS_RECEIVED,
+        states: groupedStates
+      });
+    });
+
   }
 
 }  

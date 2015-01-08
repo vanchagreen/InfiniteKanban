@@ -14,6 +14,17 @@ var wsapi = require('../utils/WsapiUtils');
 var KanbanView = React.createClass({
   mixins: [authenticationMixin, Router.State],
 
+  componentWillReceiveProps: function () {
+    if (!_.isEqual(this._prevParams, this.getParams())) {
+      this._prevParams = _.clone(this.getParams())
+      debugger;
+      this.setState({
+        currentTypePath: TypeStore.getCurrentTypePath(this.getParams().type)
+      });
+    }
+    WsapiActionCreators.loadRecords(this.state.currentTypePath);
+  },
+
   getInitialState: function() {
     return {
       types: TypeStore.getTypes(),
@@ -21,27 +32,39 @@ var KanbanView = React.createClass({
     };
   },
 
-  _onChange: function() {
+  _onTypeChange: function() {
     this.setState({
+      currentTypePath: TypeStore.getCurrentTypePath(this.getParams.type),
       types: TypeStore.getTypes(),
-      states: StateStore.getStates(),
+    });
+
+    WsapiActionCreators.loadRecords(this.state.currentTypePath);
+  },
+
+  _onStateChange: function() {
+    this.setState({
+      states: StateStore.getStates()
     });
   },
 
   componentWillMount: function(){
-    TypeStore.addChangeListener(this._onChange);
+    TypeStore.addChangeListener(this._onTypeChange);
     WsapiActionCreators.loadTypes();
 
-    StateStore.addChangeListener(this._onChange);
+    StateStore.addChangeListener(this._onStateChange);
     WsapiActionCreators.loadStates();
+
   },
 
   render: function() {
-    var type = this.getParams().splat;
-    var featureStates = _.pluck(this.state.states[type], 'Name').join(" | ");
-
+    var type = this.getParams()
     return (
-      <code> state: {featureStates} </code>
+      <div>
+        <h1> URL: {type} </h1>
+        <p>types: {this.state.types}</p>
+        <p>states: {this.state.states}</p>
+        <p>currentTypePath: {this.state.currentTypePath}</p>
+      </div>
     );
   }
 });

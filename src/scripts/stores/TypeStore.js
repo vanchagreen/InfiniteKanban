@@ -2,8 +2,10 @@ var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
 var merge = require('react/lib/merge');
+var _ = require('lodash');
+var WsapiActionCreators = require('../actions/WsapiActionCreators');
 
-var _types = [];
+var _types = {};
 
 var TypeStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -17,9 +19,24 @@ var TypeStore = merge(EventEmitter.prototype, {
   emitChange: function() {
     this.emit(Constants.CHANGE_EVENT);
   },
-  
-  getTypes: function() {
+
+  _setTypes: function(types){
+    _types = types;
+    //_types = _.zipObject(_.pluck(types, 'Name').map(function(str){return str.toLowerCase()}), types);
+  },
+
+  getTypes: function(route) {
     return _types;
+  },
+
+  getCurrentTypePath: function(urlPath){
+    if (!urlPath && _types[0]){
+      return _types[0].TypePath;
+    }
+    var correctType = _.find(_types, function(type){
+      return type.Name.toLowerCase() === urlPath.toLowerCase();
+    });
+    return correctType.TypePath;
   },
 
   dispatcherIndex: AppDispatcher.register(function(payload) {
@@ -27,7 +44,7 @@ var TypeStore = merge(EventEmitter.prototype, {
 
     switch(action.type) {
       case Constants.ActionSources.TYPES_RECEIVED:
-        _types = action.typeDefinitions.records;
+        TypeStore._setTypes(action.typeDefinitions.records);
         TypeStore.emitChange();
         break;
     }

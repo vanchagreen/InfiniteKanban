@@ -16,7 +16,9 @@ var routes = (
 
   <Route path="/" handler={InfiniteKanbanApp}>
       <Route name="login" path="/login" handler={Login} />
-      <Route name="kanban" path="/*?" handler={KanbanView} />
+      <Route name="kanban" path="/?:type?/?:oid?" handler={KanbanView}>
+      </Route>
+
   </Route>
 );
 

@@ -36,7 +36,7 @@ module.exports = {
     getRecords: function(options) {
         var params = {
             start: 1,
-            pagesize: options.pageSize || 50,
+            pagesize: options.pageSize || 200,
             fetch: options.fetch === true ? true : options.fetch.join(','),
             order: options.order || ''
         };
