@@ -4,7 +4,7 @@ var Constants = require('../constants/AppConstants');
 var merge = require('react/lib/merge');
 var _ = require('lodash');
 
-var _types = {};
+var _types = [];
 
 var TypeStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {

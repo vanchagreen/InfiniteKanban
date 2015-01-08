@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
 var merge = require('react/lib/merge');
 
-var _records = [];
+var _records = {};
 
 var RecordStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {

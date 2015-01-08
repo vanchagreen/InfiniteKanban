@@ -14,9 +14,7 @@ var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
 var ParentChildMapper = require('../utils/ParentChildMapper');
 
-var Grid = require('react-bootstrap/Grid');
-var Row = require('react-bootstrap/Row');
-var Col = require('react-bootstrap/Col');
+var CardBoard = require('./CardBoard');
 
 
 var KanbanView = React.createClass({
@@ -27,19 +25,37 @@ var KanbanView = React.createClass({
       this._prevParams = _.clone(this.getParams());
     }
     WsapiActionCreators.loadRecords(this.getParams());
+    this.setState({
+      currentType: this._getCurrentType(TypeStore.getTypes())
+    });
 
   },
 
   getInitialState: function() {
     return {
       types: TypeStore.getTypes(),
-      states: StateStore.getStates()
+      states: StateStore.getStates(),
+      records: RecordStore.getRecords()
     };
+  },
+
+  _getCurrentType: function(typeDefs) {
+    if (!typeDefs.length) return null;
+
+    var type = this.getParams().type.toLowerCase();
+    var oid = this.getParams();
+
+    if (oid === undefined) return type;
+
+    return typeDefs[1 + _.findIndex(typeDefs, function(typeDef) {
+      return typeDef.Name.toLowerCase() === type.toLowerCase();
+    })].Name.toLowerCase();
   },
 
   _onTypeChange: function() {
     this.setState({
       types: TypeStore.getTypes(),
+      currentType: this._getCurrentType(TypeStore.getTypes())
     });
 
     WsapiActionCreators.loadRecords(this.getParams());
@@ -68,38 +84,13 @@ var KanbanView = React.createClass({
   },
 
   render: function() {
-    var type = this.getParams().type;
-    var states = this.state.states[type] || [];
-    var records = this.state.records || {};
-    var groupedRecords = _.groupBy(records, function(record) {
-      return record.State ? record.State._refObjectName : states[0];
-    });
-
-    var maxRecords = _.max(groupedRecords, function(records) {return records.length}).length;
-
-    return (
-      <Grid fluid={true}>
-        {states.map(function(state) {
-          return (
-            <Col xs={Math.floor(12 / states.length)} key={state}>
-              <p>{state}</p>
-              {
-                groupedRecords[state] ?
-                  groupedRecords[state].map(function(record) {
-                    return (
-                      <Row>
-                        <Link to={'/' + record.PortfolioItemTypeName + '/' + record.ObjectID}>{record.Name}</Link>
-                      </Row>
-                    )
-                  })
-                :
-                  <p></p>
-              }
-            </Col>
-          )
-        })}
-      </Grid>
-    );
+    if (this.state.currentType && this.state.states[this.state.currentType]) {
+        return (
+          <CardBoard states={this.state.states[this.state.currentType]} records={this.state.records}>
+          </CardBoard>
+        );
+    }
+    return <p>Nothing to see here folks</p>;
   }
 });
 

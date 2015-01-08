@@ -30,10 +30,10 @@ module.exports = {
 
     WsapiUtils.getRecords(opts).done(function(result) {
       var groupedStates = _.groupBy(result.records, function(record) {
-        return record.TypeDef ? record.TypeDef._refObjectName : null;
+        return record.TypeDef ? record.TypeDef._refObjectName.toLowerCase() : null;
       });
       delete groupedStates["null"];
-      
+
       var transformedStates = _.transform(groupedStates, function(result, states, key) {
         result[key] = _.transform(states, function(result, state) {
           result.push(state.Name);
@@ -56,12 +56,12 @@ module.exports = {
       fetch: true
     };
     WsapiUtils.getRecords(opts).done(function(result) {
-      var groupedStates = _.groupBy(result.records, function(record) {
-        return record.TypeDef ? record.TypeDef._refObjectName : null;
+      var groupedRecords = _.groupBy(result.records, function(record) {
+        return record.State ? record.State._refObjectName.toLowerCase() : 'NoEntry';
       });
       AppDispatcher.handleServerAction({
         type: ActionSources.RECORDS_RECEIVED,
-        records: result.records
+        records: groupedRecords
       });
     });
 
