@@ -35,6 +35,10 @@ _getChildTypes = function (parentType, property) {
 };
 
 module.exports = {
+    generateUrlLink: function(){
+        // debugger;
+    },
+
     getChildTypes: function (parentType) {
         return _getChildTypes(parentType, 'typePath');
     },

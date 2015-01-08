@@ -12,7 +12,7 @@ var WsapiActionCreators = require('../actions/WsapiActionCreators');
 var authenticationMixin = require('../utils/authenticationMixin');
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
-var wsapi = require('../utils/WsapiUtils');
+var ParentChildMapper = require('../utils/ParentChildMapper');
 
 var Grid = require('react-bootstrap/Grid');
 var Row = require('react-bootstrap/Row');
@@ -25,11 +25,9 @@ var KanbanView = React.createClass({
   componentWillReceiveProps: function () {
     if (!_.isEqual(this._prevParams, this.getParams())) {
       this._prevParams = _.clone(this.getParams());
-      this.setState({
-        currentTypePath: TypeStore.getCurrentTypePath(this.getParams().type)
-      });
     }
-    WsapiActionCreators.loadRecords(this.state.currentTypePath, this.getParams().oid);
+    WsapiActionCreators.loadRecords(this.getParams());
+
   },
 
   getInitialState: function() {
@@ -41,11 +39,10 @@ var KanbanView = React.createClass({
 
   _onTypeChange: function() {
     this.setState({
-      currentTypePath: TypeStore.getCurrentTypePath(this.getParams().type),
       types: TypeStore.getTypes(),
     });
 
-    WsapiActionCreators.loadRecords(this.state.currentTypePath, this.getParams().oid);
+    WsapiActionCreators.loadRecords(this.getParams());
   },
 
   _onStateChange: function() {

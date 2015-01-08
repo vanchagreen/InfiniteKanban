@@ -1,6 +1,7 @@
 var ActionSources = require('../constants/AppConstants').ActionSources;
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var WsapiUtils = require('../utils/WsapiUtils');
+var TypeStore = require('../stores/TypeStore');
 
 module.exports = {
   loadTypes: function() {
@@ -47,8 +48,9 @@ module.exports = {
 
   },
 
-  loadRecords: function(typePath, oid) {
-    var typeName = oid === undefined ? typePath : typePath + '/' + oid + '/Children'; 
+  loadRecords: function(urlParams) {
+    var wsapiTypePath = TypeStore.convertTypePathForWsapi(urlParams.type);
+    var typeName = urlParams.oid === undefined ? wsapiTypePath : wsapiTypePath + '/' + urlParams.oid + '/Children'; 
     var opts = {
       typeName: typeName,
       fetch: true

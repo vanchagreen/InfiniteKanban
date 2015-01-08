@@ -17,6 +17,12 @@ var RecordStore = merge(EventEmitter.prototype, {
   emitChange: function() {
     this.emit(Constants.CHANGE_EVENT);
   },
+
+  getRecordByProperty: function(property, value){
+    var correctType = _.find(_records, function(record){
+      return record[property].toLowerCase() === value.toLowerCase();
+    });
+  },
   
   getRecords: function() {
     return _records;

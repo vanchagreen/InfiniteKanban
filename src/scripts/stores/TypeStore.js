@@ -3,7 +3,6 @@ var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
 var merge = require('react/lib/merge');
 var _ = require('lodash');
-var WsapiActionCreators = require('../actions/WsapiActionCreators');
 
 var _types = {};
 
@@ -29,15 +28,16 @@ var TypeStore = merge(EventEmitter.prototype, {
     return _types;
   },
 
-  getCurrentTypePath: function(urlPath){
-    if (!urlPath && _types[0]){
+  convertTypePathForWsapi: function(typePath){
+    if (!typePath && _types[0]){
       return _types[0].TypePath;
     }
     var correctType = _.find(_types, function(type){
-      return type.Name.toLowerCase() === urlPath.toLowerCase();
+      return type.Name.toLowerCase() === typePath.toLowerCase();
     });
-    return correctType.TypePath;
+    return correctType && correctType.TypePath;
   },
+  
 
   dispatcherIndex: AppDispatcher.register(function(payload) {
     var action = payload.action;
