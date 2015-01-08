@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var Router = require('react-router');
+var _ = require('lodash');
 
 var TypeStore = require('../stores/TypeStore');
 var StateStore = require('../stores/StateStore');
@@ -18,12 +19,12 @@ var KanbanView = React.createClass({
 
   componentWillReceiveProps: function () {
     if (!_.isEqual(this._prevParams, this.getParams())) {
-      this._prevParams = _.clone(this.getParams())
+      this._prevParams = _.clone(this.getParams());
       this.setState({
         currentTypePath: TypeStore.getCurrentTypePath(this.getParams().type)
       });
     }
-    WsapiActionCreators.loadRecords(this.state.currentTypePath);
+    WsapiActionCreators.loadRecords(this.state.currentTypePath, this.getParams().oid);
   },
 
   getInitialState: function() {
@@ -65,14 +66,15 @@ var KanbanView = React.createClass({
   },
 
   render: function() {
-    var type = this.getParams()
+    var records = _.map(this.state.records, function(record){
+      return (<Link to={'/' + record.PortfolioItemTypeName + '/' + record.ObjectID}>{record.Name}</Link>);
+    });
     return (
       <div>
-        <h1> URL: {type} </h1>
         <p>types: {this.state.types}</p>
         <p>states: {this.state.states}</p>
         <p>currentTypePath: {this.state.currentTypePath}</p>
-        <p>records: {this.state.records}</p>
+        <p>records: {records} </p>
       </div>
     );
   }

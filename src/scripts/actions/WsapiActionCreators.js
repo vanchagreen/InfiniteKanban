@@ -48,9 +48,9 @@ module.exports = {
   },
 
   loadRecords: function(typePath, oid) {
-    var typeName = oid === undefined ? typePath : typePath + '/Children/' + oid; 
+    var typeName = oid === undefined ? typePath : typePath + '/' + oid + '/Children'; 
     var opts = {
-      typeName: typePath,
+      typeName: typeName,
       fetch: true
     };
     WsapiUtils.getRecords(opts).done(function(result) {
