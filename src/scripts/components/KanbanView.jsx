@@ -40,10 +40,11 @@ var KanbanView = React.createClass({
   },
 
   _getCurrentType: function(typeDefs) {
+    debugger;
     if (!typeDefs.length) return null;
 
     var type = this.getParams().type.toLowerCase();
-    var oid = this.getParams();
+    var oid = this.getParams().oid;
 
     if (oid === undefined) return type;
 
