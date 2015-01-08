@@ -32,9 +32,16 @@ module.exports = {
         return record.TypeDef ? record.TypeDef._refObjectName : null;
       });
       delete groupedStates["null"];
+      
+      var transformedStates = _.transform(groupedStates, function(result, states, key) {
+        result[key] = _.transform(states, function(result, state) {
+          result.push(state.Name);
+        })
+      });
+
       AppDispatcher.handleServerAction({
         type: ActionSources.STATES_RECEIVED,
-        states: groupedStates
+        states: transformedStates
       });
     });
 
