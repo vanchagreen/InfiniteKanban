@@ -3,9 +3,9 @@ var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
 var merge = require('react/lib/merge');
 
-var _states = {};
+var _records = [];
 
-var StateStore = merge(EventEmitter.prototype, {
+var RecordStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(Constants.CHANGE_EVENT, callback);
   },
@@ -18,25 +18,22 @@ var StateStore = merge(EventEmitter.prototype, {
     this.emit(Constants.CHANGE_EVENT);
   },
   
-  getStates: function() {
-    return _states;
-  },
-
-  getStatesForType: function(type) {
-    return _states[type.toLowerCase()];
+  getRecords: function() {
+    return _records;
   },
 
   dispatcherIndex: AppDispatcher.register(function(payload) {
     var action = payload.action;
 
     switch(action.type) {
-      case Constants.ActionSources.STATES_RECEIVED:
-        _states = action.states;
-        StateStore.emitChange();
+      case Constants.ActionSources.RECORDS_RECEIVED:
+        debugger;
+        _records = action.records;
+        RecordStore.emitChange();
         break;
     }
   })
 
 });
 
-module.exports = StateStore;
+module.exports = RecordStore;

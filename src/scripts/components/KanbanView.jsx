@@ -4,6 +4,8 @@ var Router = require('react-router');
 
 var TypeStore = require('../stores/TypeStore');
 var StateStore = require('../stores/StateStore');
+var RecordStore = require('../stores/RecordStore');
+
 var WsapiActionCreators = require('../actions/WsapiActionCreators');
 
 var authenticationMixin = require('../utils/authenticationMixin');
@@ -17,7 +19,6 @@ var KanbanView = React.createClass({
   componentWillReceiveProps: function () {
     if (!_.isEqual(this._prevParams, this.getParams())) {
       this._prevParams = _.clone(this.getParams())
-      debugger;
       this.setState({
         currentTypePath: TypeStore.getCurrentTypePath(this.getParams().type)
       });
@@ -34,17 +35,23 @@ var KanbanView = React.createClass({
 
   _onTypeChange: function() {
     this.setState({
-      currentTypePath: TypeStore.getCurrentTypePath(this.getParams.type),
+      currentTypePath: TypeStore.getCurrentTypePath(this.getParams().type),
       types: TypeStore.getTypes(),
     });
 
-    WsapiActionCreators.loadRecords(this.state.currentTypePath);
+    WsapiActionCreators.loadRecords(this.state.currentTypePath, this.getParams().oid);
   },
 
   _onStateChange: function() {
     this.setState({
       states: StateStore.getStates()
     });
+  },
+
+  _onRecordChange: function() {
+    this.setState({
+      records: RecordStore.getRecords()
+    })
   },
 
   componentWillMount: function(){
@@ -54,6 +61,7 @@ var KanbanView = React.createClass({
     StateStore.addChangeListener(this._onStateChange);
     WsapiActionCreators.loadStates();
 
+    RecordStore.addChangeListener(this._onRecordChange);
   },
 
   render: function() {
@@ -64,6 +72,7 @@ var KanbanView = React.createClass({
         <p>types: {this.state.types}</p>
         <p>states: {this.state.states}</p>
         <p>currentTypePath: {this.state.currentTypePath}</p>
+        <p>records: {this.state.records}</p>
       </div>
     );
   }

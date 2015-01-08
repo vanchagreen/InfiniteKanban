@@ -59,7 +59,7 @@ module.exports = {
       });
       AppDispatcher.handleServerAction({
         type: ActionSources.RECORDS_RECEIVED,
-        states: groupedStates
+        records: result.records
       });
     });
 
