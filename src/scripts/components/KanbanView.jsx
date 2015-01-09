@@ -30,8 +30,10 @@ var KanbanView = React.createClass({
     WsapiActionCreators.loadRecords(this.getParams(), currentType);
 
     this.setState({
-      currentType: currentType
+      currentType: currentType,
+      currentRecord: this.getParams().oid ? RecordStore.getRecordByProperty('ObjectID', this.getParams().oid) : undefined
     });
+    debugger;
   },
 
   getInitialState: function() {
@@ -54,12 +56,12 @@ var KanbanView = React.createClass({
 
     if (oid === undefined) return type;
 
-    if (type.toLowerCase() === _.last(typeDefs).Name.toLowerCase()) {
+    if (type === _.last(typeDefs).Name.toLowerCase() || type === 'schedulableartifact') {
       return 'schedulableartifact';
     }
 
     var ret = typeDefs[1 + _.findIndex(typeDefs, function(typeDef) {
-      return typeDef.Name.toLowerCase() === type.toLowerCase();
+      return typeDef.Name.toLowerCase() === type;
     })];
 
     return ret && ret.Name.toLowerCase();
@@ -69,7 +71,8 @@ var KanbanView = React.createClass({
     var currentType = this._getCurrentType(TypeStore.getTypes());
     this.setState({
       types: TypeStore.getTypes(),
-      currentType: currentType
+      currentType: currentType,
+      currentRecord: this.getParams().oid ? RecordStore.getRecordByProperty('ObjectID', this.getParams().oid) : undefined
     });
 
     WsapiActionCreators.loadRecords(this.getParams(), currentType);
@@ -83,8 +86,10 @@ var KanbanView = React.createClass({
 
   _onRecordChange: function() {
     this.setState({
-      records: RecordStore.getRecords()
-    })
+      records: RecordStore.getRecords(),
+      currentRecord: this.getParams().oid ? RecordStore.getRecordByProperty('ObjectID', this.getParams().oid) : undefined
+    });
+    debugger;
   },
 
   componentWillMount: function(){
@@ -101,7 +106,7 @@ var KanbanView = React.createClass({
   render: function() {
     if (this.state.currentType && this.state.states[this.state.currentType]) {
         return (
-          <CardBoard states={this.state.states[this.state.currentType]} records={this.state.records}>
+          <CardBoard states={this.state.states[this.state.currentType]} currentRecord = {this.state.currentRecord} records={this.state.records}>
           </CardBoard>
         );
     }

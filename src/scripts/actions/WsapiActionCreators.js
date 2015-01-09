@@ -2,7 +2,6 @@ var ActionSources = require('../constants/AppConstants').ActionSources;
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var WsapiUtils = require('../utils/WsapiUtils');
 var TypeStore = require('../stores/TypeStore');
-var ParentChildMapper = require('../utils/ParentChildMapper');
 
 module.exports = {
   loadTypes: function() {
@@ -50,16 +49,17 @@ module.exports = {
   },
 
   loadRecords: function(urlParams, currentType) {
-    var wsapiTypePath = urlParams.type ? TypeStore.convertTypePathForWsapi(urlParams.type) : TypeStore.getTypes()[0].TypePath ;
+    var wsapiTypePath = urlParams.type ? TypeStore.convertTypePathForWsapi(urlParams.type) : TypeStore.getTypes()[0].TypePath;
     var ordinalValue =  urlParams.type ? TypeStore.getOrdinalValue(urlParams.type) :  TypeStore.getTypes()[0].Ordinal;
     var artifactTypes, query;
 
+    wsapiTypePath = wsapiTypePath || 'artifact;'
     if(urlParams.oid){
       if(ordinalValue > 0){
         wsapiTypePath = wsapiTypePath + '/' + urlParams.oid + '/Children'; 
       }
       else{
-        artifactTypes = ParentChildMapper.getChildTypes(wsapiTypePath);
+        artifactTypes = ['hierarchicalrequirement','defect', 'task','testcase'];
         wsapiTypePath = 'artifact';
         query = ordinalValue === 0 ? '(Feature.ObjectID = ' + urlParams.oid + ' )' : '(Parent.ObjectID = ' + urlParams.oid + ' )'
       }
