@@ -24,11 +24,14 @@ var KanbanView = React.createClass({
     if (!_.isEqual(this._prevParams, this.getParams())) {
       this._prevParams = _.clone(this.getParams());
     }
+
     var currentType = this._getCurrentType(TypeStore.getTypes());
+
+    WsapiActionCreators.loadRecords(this.getParams(), currentType);
+
     this.setState({
       currentType: currentType
     });
-    WsapiActionCreators.loadRecords(this.getParams());
   },
 
   getInitialState: function() {
@@ -51,18 +54,23 @@ var KanbanView = React.createClass({
 
     if (oid === undefined) return type;
 
+    if (type.toLowerCase() === _.last(typeDefs).Name.toLowerCase()) {
+      return 'schedulableartifact';
+    }
+
     return typeDefs[1 + _.findIndex(typeDefs, function(typeDef) {
       return typeDef.Name.toLowerCase() === type.toLowerCase();
     })].Name.toLowerCase();
   },
 
   _onTypeChange: function() {
+    var currentType = this._getCurrentType(TypeStore.getTypes());
     this.setState({
       types: TypeStore.getTypes(),
-      currentType: this._getCurrentType(TypeStore.getTypes())
+      currentType: currentType
     });
 
-    WsapiActionCreators.loadRecords(this.getParams());
+    WsapiActionCreators.loadRecords(this.getParams(), currentType);
   },
 
   _onStateChange: function() {
@@ -85,6 +93,7 @@ var KanbanView = React.createClass({
     WsapiActionCreators.loadStates();
 
     RecordStore.addChangeListener(this._onRecordChange);
+    WsapiActionCreators.loadScheduleStates();
   },
 
   render: function() {

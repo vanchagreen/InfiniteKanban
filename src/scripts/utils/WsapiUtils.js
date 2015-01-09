@@ -33,11 +33,16 @@ module.exports = {
         });
     },
 
+    getWsapiURL: function(ref) {
+        return hostname + '/slm/webservice/' + this.getWsapiVersion() + '/' + ref;
+    },
+
     getRecords: function(options) {
+        options.fetch = options.fetch || [];
         var params = {
             start: 1,
             pagesize: options.pageSize || 200,
-            fetch: options.fetch === true ? true : options.fetch.join(','),
+            fetch: options.fetch.length ? options.fetch.join(',') : options.fetch,
             order: options.order || ''
         };
 
@@ -55,7 +60,7 @@ module.exports = {
         if (options.types) {
             params.types = options.types.join(',');
         }
-        return getJson(hostname + '/slm/webservice/' + this.getWsapiVersion() + '/' + options.typeName, params).then(function(results) {
+        return getJson(this.getWsapiURL(options.typeName), params).then(function(results) {
             _.each(results.QueryResult.Errors, function (error) {
                 throw error;
             });
@@ -89,5 +94,7 @@ module.exports = {
         });
         
         return deferred.promise();
-    }
+    },
+
+    getJson: getJson
 };

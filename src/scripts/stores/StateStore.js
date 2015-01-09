@@ -34,6 +34,9 @@ var StateStore = merge(EventEmitter.prototype, {
         _states = action.states;
         StateStore.emitChange();
         break;
+      case Constants.ActionSources.SCHEDULE_STATES_RECEIVED:
+        _states["schedulableartifact"] = action.scheduleStates;
+        StateStore.emitChange();
     }
   })
 
