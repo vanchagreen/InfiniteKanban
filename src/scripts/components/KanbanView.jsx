@@ -24,7 +24,10 @@ var KanbanView = React.createClass({
     if (!_.isEqual(this._prevParams, this.getParams())) {
       this._prevParams = _.clone(this.getParams());
     }
-    debugger;
+    var currentType = this._getCurrentType(TypeStore.getTypes());
+    this.setState({
+      currentType: currentType
+    });
     WsapiActionCreators.loadRecords(this.getParams());
   },
 
