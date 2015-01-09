@@ -1,5 +1,6 @@
 var parentChildTypeMap = {
     hierarchicalrequirement: [
+        {typePath: 'hierarchicalrequirement', collectionName: 'UserStories', parentField: 'PortfolioItem'},
         {typePath: 'defect', collectionName: 'Defects', parentField: 'Requirement'},
         {typePath: 'task', collectionName: 'Tasks', parentField: 'WorkProduct'},
         {typePath: 'testcase', collectionName: 'TestCases', parentField: 'WorkProduct'}

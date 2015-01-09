@@ -58,9 +58,11 @@ var KanbanView = React.createClass({
       return 'schedulableartifact';
     }
 
-    return typeDefs[1 + _.findIndex(typeDefs, function(typeDef) {
+    var ret = typeDefs[1 + _.findIndex(typeDefs, function(typeDef) {
       return typeDef.Name.toLowerCase() === type.toLowerCase();
-    })].Name.toLowerCase();
+    })];
+
+    return ret && ret.Name.toLowerCase();
   },
 
   _onTypeChange: function() {
