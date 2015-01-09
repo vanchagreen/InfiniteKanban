@@ -28,13 +28,23 @@ var TypeStore = merge(EventEmitter.prototype, {
     return _types;
   },
 
+  getOrdinalValue: function(typeName){
+    var correctRecord = this.findTypeByProperty('Name', typeName);
+    return correctRecord && correctRecord.Ordinal;
+  },
+
+  findTypeByProperty: function(property, value){
+    return _.find(_types, function(type){
+      return type[property].toLowerCase() === value.toLowerCase();
+    });
+  },
+
   convertTypePathForWsapi: function(typePath){
     if (!typePath && _types[0]){
       return _types[0].TypePath;
     }
-    var correctType = _.find(_types, function(type){
-      return type.Name.toLowerCase() === typePath.toLowerCase();
-    });
+    var correctType = this.findTypeByProperty('Name', typePath);
+
     return correctType && correctType.TypePath;
   },
   

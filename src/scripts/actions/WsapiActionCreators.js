@@ -2,6 +2,7 @@ var ActionSources = require('../constants/AppConstants').ActionSources;
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var WsapiUtils = require('../utils/WsapiUtils');
 var TypeStore = require('../stores/TypeStore');
+var ParentChildMapper = require('../utils/ParentChildMapper');
 
 module.exports = {
   loadTypes: function() {
@@ -49,11 +50,27 @@ module.exports = {
   },
 
   loadRecords: function(urlParams) {
-    var wsapiTypePath = TypeStore.convertTypePathForWsapi(urlParams.type);
-    var typeName = urlParams.oid === undefined ? wsapiTypePath : wsapiTypePath + '/' + urlParams.oid + '/Children'; 
+    var wsapiTypePath = urlParams.type ? TypeStore.convertTypePathForWsapi(urlParams.type) : TypeStore.getTypes()[0].TypePath ;
+    debugger;
+    var ordinalValue =  urlParams.type ? TypeStore.getOrdinalValue(urlParams.type) :  TypeStore.getTypes()[0].Ordinal;
+    var artifactTypes, query;
+
+    if(urlParams.oid){
+      if(ordinalValue > 0){
+        wsapiTypePath = wsapiTypePath + '/' + urlParams.oid + '/Children'; 
+      }
+      else{
+        artifactTypes = ParentChildMapper.getChildTypes(wsapiTypePath);
+        wsapiTypePath = 'artifact';
+        query = ordinalValue === 0 ? '(Feature.ObjectID = ' + urlParams.oid + ' )' : '(Parent.ObjectID = ' + urlParams.oid + ' )'
+      }
+    }
+
     var opts = {
-      typeName: typeName,
-      fetch: true
+      typeName: wsapiTypePath,
+      fetch: true,
+      types: artifactTypes,
+      query: query
     };
     WsapiUtils.getRecords(opts).done(function(result) {
       var groupedRecords = _.groupBy(result.records, function(record) {

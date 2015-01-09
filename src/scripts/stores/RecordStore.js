@@ -23,7 +23,7 @@ var RecordStore = merge(EventEmitter.prototype, {
       return record[property].toLowerCase() === value.toLowerCase();
     });
   },
-  
+
   getRecords: function() {
     return _records;
   },
