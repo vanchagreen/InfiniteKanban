@@ -8,7 +8,6 @@ var Card = require('./Card');
 var CardBoardColumn = React.createClass({
   render: function () {
     var records = this.props.records;
-    if (!Object.keys(records).length) { return null; }
 
     var state = this.props.state;
     return (

@@ -28,7 +28,6 @@ var KanbanView = React.createClass({
     this.setState({
       currentType: this._getCurrentType(TypeStore.getTypes())
     });
-
   },
 
   getInitialState: function() {
@@ -40,7 +39,6 @@ var KanbanView = React.createClass({
   },
 
   _getCurrentType: function(typeDefs) {
-    debugger;
     if (!typeDefs.length) return null;
 
     if(this.getParams().type === undefined){
