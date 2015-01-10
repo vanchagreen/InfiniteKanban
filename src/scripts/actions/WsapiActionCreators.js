@@ -61,10 +61,10 @@ module.exports = {
       else{
         artifactTypes = ['hierarchicalrequirement','defect', 'task','testcase'];
         wsapiTypePath = 'artifact';
-        query = '((Feature.ObjectID = '    + urlParams.oid + ' ) OR ' + 
-                '(Parent.ObjectID = '      + urlParams.oid + ' ) OR ' + 
-                '(Requirement.ObjectID = ' + urlParams.oid + ' ) OR ' +
-                '(WorkProduct.ObjectID = ' + urlParams.oid + '))'; 
+        query = '(((Feature.ObjectID = '    + urlParams.oid + ') OR ' + 
+                '(Parent.ObjectID = '      + urlParams.oid + ')) OR ' + 
+                '((Requirement.ObjectID = ' + urlParams.oid + ') OR ' +
+                '(WorkProduct.ObjectID = ' + urlParams.oid + ')))'; 
       }
     }
 
