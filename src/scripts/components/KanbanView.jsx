@@ -33,7 +33,6 @@ var KanbanView = React.createClass({
       currentType: currentType,
       currentRecord: this.getParams().oid ? RecordStore.getRecordByProperty('ObjectID', this.getParams().oid) : undefined
     });
-    debugger;
   },
 
   getInitialState: function() {
@@ -89,7 +88,6 @@ var KanbanView = React.createClass({
       records: RecordStore.getRecords(),
       currentRecord: this.getParams().oid ? RecordStore.getRecordByProperty('ObjectID', this.getParams().oid) : undefined
     });
-    debugger;
   },
 
   componentWillMount: function(){
@@ -106,7 +104,7 @@ var KanbanView = React.createClass({
   render: function() {
     if (this.state.currentType && this.state.states[this.state.currentType]) {
         return (
-          <CardBoard states={this.state.states[this.state.currentType]} currentRecord = {this.state.currentRecord} records={this.state.records}>
+          <CardBoard states={this.state.states[this.state.currentType]} currentRecord={this.state.currentRecord} records={this.state.records}>
           </CardBoard>
         );
     }

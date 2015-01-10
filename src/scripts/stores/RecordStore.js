@@ -19,7 +19,6 @@ var RecordStore = merge(EventEmitter.prototype, {
   },
 
   getRecordByProperty: function(property, value){
-    debugger;
     return _.find(_records, function(records){
       return _.find(records, function(record){
         var a = record[property] + '';

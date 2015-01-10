@@ -11,17 +11,37 @@ var CardBoard = React.createClass({
   render: function () {
     var states = this.props.states;
     var records = this.props.records;
+    var columns = states.map(function(state) {
+      return (
+        <td>
+          <CardBoardColumn records={records} state={state}>
+          </CardBoardColumn>
+        </td>
+      );
+    });
+
+    var columnHeaders = states.map(function(state) {
+      var tehClass = 'col-md-' + Math.floor(12 / states.length) + ' text-center';
+      return (
+        <th className={tehClass}> {state} </th>
+        );
+    });
+
     return (
-      <Grid fluid={true}>
-        {states.map(function(state) {
-          return (
-            <Col xs={Math.floor(12 / states.length)} key={state}>
-              <CardBoardColumn records={records} state={state}>
-              </CardBoardColumn>
-            </Col>
-          )
-        })}
-      </Grid>
+      <div className="kanban-board">
+        <table className="table table-responsive">
+          <thead>
+            <tr>
+              {columnHeaders}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {columns}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

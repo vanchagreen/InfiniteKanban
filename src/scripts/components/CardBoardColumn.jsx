@@ -12,7 +12,6 @@ var CardBoardColumn = React.createClass({
     var state = this.props.state;
     return (
       <div>
-        <p>{state}</p>
         {
           records[state.toLowerCase()] ? 
             records[state.toLowerCase()].map(function(record) {
@@ -24,7 +23,7 @@ var CardBoardColumn = React.createClass({
           :
             null
         }
-      </div>
+       </div>
     );
   }
 });
